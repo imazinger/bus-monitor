@@ -21,7 +21,7 @@
       height: 100vh;
       height: 100dvh;
       flex-direction: column;
-      padding: 12px;
+      padding: 8px;
     }
 
     .panel {
@@ -53,24 +53,35 @@
       line-height: 1.35;
     }
 
-    .controls {
-      max-height: 280px;
-      overflow: hidden;
-      transition: max-height 180ms ease, opacity 180ms ease;
-    }
-
-    body.controls-hidden .controls {
-      max-height: 0;
-      opacity: 0;
+    .controls-toggle {
+      min-height: 32px;
+      padding: 0 14px;
+      border: 1px solid #c9d2df;
+      border-radius: 999px;
+      background: #fff;
+      color: #1f2937;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .tabs {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      max-height: 220px;
       overflow-x: visible;
       padding: 8px;
       border-bottom: 1px solid #d8dee8;
+      transition: max-height 180ms ease, opacity 180ms ease, padding 180ms ease;
+    }
+
+    body.tabs-hidden .tabs {
+      max-height: 0;
+      overflow: hidden;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
     }
 
     .tab {
@@ -128,6 +139,7 @@
       <div class="controls">
         <header>
           <h1>🚌 静鉄バス接近情報</h1>
+          <button class="controls-toggle" id="controlsToggle" type="button" aria-expanded="true">タブを閉じる</button>
           <button class="reload-button" id="reloadButton" type="button" aria-label="現在の接近情報をリロード">
             <span class="reload-icon" aria-hidden="true">↻</span>
             <span>リロード</span>
@@ -153,12 +165,13 @@
   <script>
     const tabs = document.querySelectorAll(".tab");
     const busFrame = document.getElementById("busFrame");
+    const controlsToggle = document.getElementById("controlsToggle");
     const reloadButton = document.getElementById("reloadButton");
-    let lastScrollY = window.scrollY;
-    let touchStartY = 0;
 
-    function setControlsHidden(hidden) {
-      document.body.classList.toggle("controls-hidden", hidden);
+    function setTabsHidden(hidden) {
+      document.body.classList.toggle("tabs-hidden", hidden);
+      controlsToggle.textContent = hidden ? "タブを開く" : "タブを閉じる";
+      controlsToggle.setAttribute("aria-expanded", String(!hidden));
     }
 
     function selectTab(tab) {
@@ -184,37 +197,9 @@
       busFrame.src = busFrame.src;
     });
 
-    window.addEventListener("wheel", (event) => {
-      if (Math.abs(event.deltaY) < 8) {
-        return;
-      }
-
-      setControlsHidden(event.deltaY > 0);
-    }, { passive: true });
-
-    window.addEventListener("touchstart", (event) => {
-      touchStartY = event.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener("touchmove", (event) => {
-      const deltaY = touchStartY - event.touches[0].clientY;
-
-      if (Math.abs(deltaY) < 12) {
-        return;
-      }
-
-      setControlsHidden(deltaY > 0);
-      touchStartY = event.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener("scroll", () => {
-      const currentScrollY = window.scrollY;
-
-      if (Math.abs(currentScrollY - lastScrollY) > 4) {
-        setControlsHidden(currentScrollY > lastScrollY);
-        lastScrollY = currentScrollY;
-      }
-    }, { passive: true });
+    controlsToggle.addEventListener("click", () => {
+      setTabsHidden(!document.body.classList.contains("tabs-hidden"));
+    });
   </script>
 </body>
 </html>
