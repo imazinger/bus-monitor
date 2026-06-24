@@ -55,25 +55,25 @@
 
     .tabs {
       display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 10px 12px;
+      flex-wrap: wrap;
+      gap: 6px;
+      overflow-x: visible;
+      padding: 8px;
       border-bottom: 1px solid #d8dee8;
-      -webkit-overflow-scrolling: touch;
     }
 
     .tab {
-      flex: 0 0 auto;
+      flex: 1 1 calc(50% - 6px);
       min-height: 44px;
-      padding: 0 14px;
+      padding: 0 8px;
       border: 1px solid #c9d2df;
       border-radius: 999px;
       background: #fff;
       color: #1f2937;
       font: inherit;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
-      white-space: nowrap;
+      line-height: 1.2;
     }
 
     .tab[aria-selected="true"] {
@@ -92,6 +92,10 @@
 
     a:hover {
       text-decoration: underline;
+    }
+
+    #openLink {
+      display: none;
     }
 
     iframe {
