@@ -164,6 +164,7 @@
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250422">帰り 静岡駅→中村町下</button>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250320">帰り 静岡駅→静岡IC</button>
           <div class="tab-divider" aria-hidden="true"></div>
+          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250032">休日 行き 中村町下</button>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250032&amp;&amp;goalId=00250422">休日 帰り 中町</button>
         </nav>
       </div>
@@ -206,7 +207,7 @@
 
     const now = new Date();
     const initialTabIndex = now.getDay() === 0 || now.getDay() === 6
-      ? 5
+      ? now.getHours() < 18 ? 5 : 6
       : now.getHours() < 12 ? 0 : 2;
     selectTab(tabs[initialTabIndex]);
 
