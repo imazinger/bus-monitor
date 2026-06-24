@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>バス接近情報</title>
+  <title>🚌 静鉄バス接近情報</title>
   <style>
     * {
       box-sizing: border-box;
@@ -82,20 +82,24 @@
       color: #fff;
     }
 
-    a {
-      flex: 0 0 auto;
-      color: #0f5fb8;
+    .reload-button {
+      display: inline-flex;
+      min-height: 40px;
+      gap: 6px;
+      align-items: center;
+      padding: 0 12px;
+      border: 1px solid #c9d2df;
+      border-radius: 999px;
+      background: #fff;
+      color: #1f2937;
+      font: inherit;
       font-size: 14px;
-      text-decoration: none;
-      white-space: nowrap;
+      font-weight: 700;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
-
-    #openLink {
-      display: none;
+    .reload-icon {
+      font-size: 18px;
+      line-height: 1;
     }
 
     iframe {
@@ -111,22 +115,24 @@
   <main>
     <section class="panel">
       <header>
-        <h1>バス接近情報</h1>
-        <a id="openLink" href="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250030" target="_blank" rel="noopener noreferrer">別タブで開く</a>
+        <h1>🚌 静鉄バス接近情報</h1>
+        <button class="reload-button" id="reloadButton" type="button" aria-label="現在の接近情報をリロード">
+          <span class="reload-icon" aria-hidden="true">↻</span>
+          <span>リロード</span>
+        </button>
       </header>
 
       <nav class="tabs" aria-label="区間">
-        <button class="tab" type="button" aria-selected="true" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250030">行き 中村町下発</button>
-        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250460">行き 静岡駅前発</button>
-        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250460&amp;&amp;goalId=00250030">帰り 静岡総合庁舎発</button>
+        <button class="tab" type="button" aria-selected="true" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250030">行き 中村町下</button>
+        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250460">行き 静岡駅前</button>
+        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250460&amp;&amp;goalId=00250030">帰り 総合庁舎</button>
         <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250422">帰り 静岡駅→中村町下</button>
-        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250320">帰り 静岡駅→静岡IC入口</button>
+        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250320">帰り 静岡駅→静岡IC</button>
       </nav>
 
       <iframe
         id="busFrame"
-        title="行き 中村町下発のバス接近情報"
-        src="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250030">
+        title="行き 中村町下のバス接近情報">
       </iframe>
     </section>
   </main>
@@ -134,7 +140,14 @@
   <script>
     const tabs = document.querySelectorAll(".tab");
     const busFrame = document.getElementById("busFrame");
-    const openLink = document.getElementById("openLink");
+    const reloadButton = document.getElementById("reloadButton");
+
+    function selectTab(tab) {
+      tabs.forEach((item) => item.setAttribute("aria-selected", "false"));
+      tab.setAttribute("aria-selected", "true");
+      busFrame.src = tab.dataset.url;
+      busFrame.title = `${tab.textContent}のバス接近情報`;
+    }
 
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
@@ -142,12 +155,14 @@
           return;
         }
 
-        tabs.forEach((item) => item.setAttribute("aria-selected", "false"));
-        tab.setAttribute("aria-selected", "true");
-        busFrame.src = tab.dataset.url;
-        busFrame.title = `${tab.textContent}のバス接近情報`;
-        openLink.href = tab.dataset.url;
+        selectTab(tab);
       });
+    });
+
+    selectTab(tabs[new Date().getHours() < 12 ? 0 : 2]);
+
+    reloadButton.addEventListener("click", () => {
+      busFrame.src = busFrame.src;
     });
   </script>
 </body>
