@@ -37,32 +37,35 @@
 
     header {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 12px;
+      padding: 8px;
       border-bottom: 1px solid #d8dee8;
     }
 
     h1 {
+      flex: 1;
       margin: 0;
       min-width: 0;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       line-height: 1.35;
+      white-space: nowrap;
     }
 
     .controls-toggle {
+      flex: none;
       min-height: 32px;
-      padding: 0 14px;
+      padding: 0 10px;
       border: 1px solid #c9d2df;
       border-radius: 999px;
       background: #fff;
       color: #1f2937;
       font: inherit;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .tabs {
@@ -106,10 +109,12 @@
 
     .reload-button {
       display: inline-flex;
-      min-height: 40px;
-      gap: 6px;
+      flex: none;
+      width: 34px;
+      min-height: 32px;
       align-items: center;
-      padding: 0 12px;
+      justify-content: center;
+      padding: 0;
       border: 1px solid #c9d2df;
       border-radius: 999px;
       background: #fff;
@@ -142,7 +147,6 @@
           <button class="controls-toggle" id="controlsToggle" type="button" aria-expanded="true">タブを閉じる</button>
           <button class="reload-button" id="reloadButton" type="button" aria-label="現在の接近情報をリロード">
             <span class="reload-icon" aria-hidden="true">↻</span>
-            <span>リロード</span>
           </button>
         </header>
 
