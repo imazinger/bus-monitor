@@ -204,7 +204,11 @@
       });
     });
 
-    selectTab(tabs[new Date().getHours() < 12 ? 0 : 2]);
+    const now = new Date();
+    const initialTabIndex = now.getDay() === 0 || now.getDay() === 6
+      ? 5
+      : now.getHours() < 12 ? 0 : 2;
+    selectTab(tabs[initialTabIndex]);
 
     reloadButton.addEventListener("click", () => {
       busFrame.src = busFrame.src;
