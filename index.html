@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>🚌 静鉄バス接近情報</title>
+  <title>🚌 静鉄バス接近</title>
   <style>
     * {
       box-sizing: border-box;
@@ -51,6 +51,17 @@
       font-size: 16px;
       font-weight: 700;
       line-height: 1.35;
+    }
+
+    .controls {
+      max-height: 280px;
+      overflow: hidden;
+      transition: max-height 180ms ease, opacity 180ms ease;
+    }
+
+    body.controls-hidden .controls {
+      max-height: 0;
+      opacity: 0;
     }
 
     .tabs {
@@ -114,21 +125,23 @@
 <body>
   <main>
     <section class="panel">
-      <header>
-        <h1>🚌 静鉄バス接近情報</h1>
-        <button class="reload-button" id="reloadButton" type="button" aria-label="現在の接近情報をリロード">
-          <span class="reload-icon" aria-hidden="true">↻</span>
-          <span>リロード</span>
-        </button>
-      </header>
+      <div class="controls">
+        <header>
+          <h1>🚌 静鉄バス接近情報</h1>
+          <button class="reload-button" id="reloadButton" type="button" aria-label="現在の接近情報をリロード">
+            <span class="reload-icon" aria-hidden="true">↻</span>
+            <span>リロード</span>
+          </button>
+        </header>
 
-      <nav class="tabs" aria-label="区間">
-        <button class="tab" type="button" aria-selected="true" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250030">行き 中村町下</button>
-        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250460">行き 静岡駅前</button>
-        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250460&amp;&amp;goalId=00250030">帰り 総合庁舎</button>
-        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250422">帰り 静岡駅→中村町下</button>
-        <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250320">帰り 静岡駅→静岡IC</button>
-      </nav>
+        <nav class="tabs" aria-label="区間">
+          <button class="tab" type="button" aria-selected="true" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250030">行き 中村町下</button>
+          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250460">行き 静岡駅前</button>
+          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250460&amp;&amp;goalId=00250030">帰り 総合庁舎</button>
+          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250422">帰り 静岡駅→中村町下</button>
+          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250320">帰り 静岡駅→静岡IC</button>
+        </nav>
+      </div>
 
       <iframe
         id="busFrame"
@@ -141,6 +154,12 @@
     const tabs = document.querySelectorAll(".tab");
     const busFrame = document.getElementById("busFrame");
     const reloadButton = document.getElementById("reloadButton");
+    let lastScrollY = window.scrollY;
+    let touchStartY = 0;
+
+    function setControlsHidden(hidden) {
+      document.body.classList.toggle("controls-hidden", hidden);
+    }
 
     function selectTab(tab) {
       tabs.forEach((item) => item.setAttribute("aria-selected", "false"));
@@ -164,6 +183,38 @@
     reloadButton.addEventListener("click", () => {
       busFrame.src = busFrame.src;
     });
+
+    window.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaY) < 8) {
+        return;
+      }
+
+      setControlsHidden(event.deltaY > 0);
+    }, { passive: true });
+
+    window.addEventListener("touchstart", (event) => {
+      touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener("touchmove", (event) => {
+      const deltaY = touchStartY - event.touches[0].clientY;
+
+      if (Math.abs(deltaY) < 12) {
+        return;
+      }
+
+      setControlsHidden(deltaY > 0);
+      touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener("scroll", () => {
+      const currentScrollY = window.scrollY;
+
+      if (Math.abs(currentScrollY - lastScrollY) > 4) {
+        setControlsHidden(currentScrollY > lastScrollY);
+        lastScrollY = currentScrollY;
+      }
+    }, { passive: true });
   </script>
 </body>
 </html>
