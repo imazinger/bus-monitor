@@ -72,7 +72,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      max-height: 220px;
+      max-height: 280px;
       overflow-x: visible;
       padding: 8px;
       border-bottom: 1px solid #d8dee8;
@@ -85,6 +85,13 @@
       padding-top: 0;
       padding-bottom: 0;
       opacity: 0;
+    }
+
+    .tab-divider {
+      flex: 0 0 100%;
+      height: 1px;
+      margin: 2px 0;
+      background: #d8dee8;
     }
 
     .tab {
@@ -156,6 +163,8 @@
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250460&amp;&amp;goalId=00250030">帰り 総合庁舎</button>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250422">帰り 静岡駅→中村町下</button>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250320">帰り 静岡駅→静岡IC</button>
+          <div class="tab-divider" aria-hidden="true"></div>
+          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250032&amp;&amp;goalId=00250422">休日 帰り 中町</button>
         </nav>
       </div>
 
