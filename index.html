@@ -158,7 +158,7 @@
       }
 
       .frame-viewport iframe {
-        height: calc(100% + 390px);
+        height: calc(100% + 340px);
       }
     }
   </style>
@@ -179,8 +179,7 @@
           <button class="tab" type="button" aria-selected="true" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250030">行き 中村町下</button>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250460">行き 静岡駅前</button>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250460&amp;&amp;goalId=00250030">帰り 総合庁舎</button>
-          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250422">帰り 静岡駅→中村町下</button>
-          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250320">帰り 静岡駅→静岡IC</button>
+          <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250030&amp;&amp;goalId=00250422">帰り 中村町下</button>
           <div class="tab-divider" aria-hidden="true"></div>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250422&amp;&amp;goalId=00250032">休日 行き 中村町下</button>
           <button class="tab" type="button" aria-selected="false" data-url="https://transfer.navitime.biz/justline/smart/location/BusLocationResult?startId=00250032&amp;&amp;goalId=00250422">休日 帰り 中町</button>
@@ -203,7 +202,7 @@
     const controlsToggle = document.getElementById("controlsToggle");
     const reloadButton = document.getElementById("reloadButton");
     const mobileFrameQuery = window.matchMedia("(max-width: 767px)");
-    const mobileFrameOffset = 390;
+    const mobileFrameOffset = 340;
 
     function setTabsHidden(hidden) {
       document.body.classList.toggle("tabs-hidden", hidden);
@@ -237,7 +236,7 @@
 
     const now = new Date();
     const initialTabIndex = now.getDay() === 0 || now.getDay() === 6
-      ? now.getHours() < 18 ? 5 : 6
+      ? now.getHours() < 18 ? 4 : 5
       : now.getHours() < 12 ? 0 : 2;
     busFrame.addEventListener("load", scrollMobileFrameToInfo);
     selectTab(tabs[initialTabIndex]);
